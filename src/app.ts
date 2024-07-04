@@ -19,11 +19,12 @@ export class App {
 
   middlewares() {
     this.app.use(morgan("dev"));
+    this.app.use(express.urlencoded({ extended: false }));
   }
 
   routes() {
     this.app.use(indexRoutes);
-    this.app.use("/list/products",postRoutes);
+    this.app.use("/products", postRoutes);
   }
 
   listen() {

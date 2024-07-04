@@ -13,7 +13,7 @@ exports.getProducts = void 0;
 const database_1 = require("../database");
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const connection = yield (0, database_1.connect)();
-    const posts = yield connection.query("SELECT * FROM products");
-    return res.json(posts[0]);
+    const products = yield connection.query("SELECT * FROM products");
+    return res.json(products[0]);
 });
 exports.getProducts = getProducts;
