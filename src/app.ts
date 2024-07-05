@@ -1,7 +1,8 @@
 import express, { Application } from "express";
 import morgan from "morgan";
-import indexRoutes from "./routes/indexRoutes";
-import postRoutes from "./routes/productsRoutes";
+import indexRoutes from "./v1/routes/indexRoutes";
+import productRoutes from "./v1/routes/productsRoutes";
+import { swaggerDocs as V1SwaggerDocs } from "./v1/swagger";
 
 export class App {
   private app: Application;
@@ -20,11 +21,12 @@ export class App {
   middlewares() {
     this.app.use(morgan("dev"));
     this.app.use(express.urlencoded({ extended: false }));
+    V1SwaggerDocs(this.app, this.port);
   }
 
   routes() {
     this.app.use(indexRoutes);
-    this.app.use("/products", postRoutes);
+    this.app.use("/products", productRoutes);
   }
 
   listen() {

@@ -10,11 +10,7 @@ export const getProducts = async (
     const connection = await connect();
     const products = await connection.query("SELECT * FROM products");
     await connection.end();
-    if (products[0].length === 0) {
-      return res.status(404).json({ message: `Products not found` });
-    } else {
-      return res.status(200).json(products[0]);
-    }
+    return res.status(200).json(products[0]);
   } catch (err) {
     return res.status(500).json({ message: err });
   }
