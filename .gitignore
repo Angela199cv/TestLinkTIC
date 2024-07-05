@@ -1,0 +1,8 @@
+# package directories
+node_modules
+
+#Tests metadata
+src/_test_/*.txt
+src/_test_/*.txt
+.esbuild/
+.build/
