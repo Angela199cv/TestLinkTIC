@@ -26,7 +26,7 @@ export class App {
 
   routes() {
     this.app.use(indexRoutes);
-    this.app.use("/products", productRoutes);
+    this.app.use("/v1/products", productRoutes);
   }
 
   listen() {

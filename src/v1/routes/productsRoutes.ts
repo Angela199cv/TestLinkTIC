@@ -34,7 +34,7 @@ const router = Router();
  *                     type: object
  */
 
-router.route("/v1/products").get(getProducts).post(createProduct);
+router.route("/").get(getProducts).post(createProduct);
 
 /**
  * @openapi
@@ -124,7 +124,7 @@ router.route("/v1/products").get(getProducts).post(createProduct);
  */
 
 router
-  .route("/v1/products/:productId")
+  .route("/:productId")
   .get(getProductById)
   .delete(deleteProductById)
   .put(updateProductById);
@@ -217,7 +217,7 @@ router
  */
 
 router
-  .route("/v1/products/name/:productName")
+  .route("/:productName")
   .get(getProductByName)
   .delete(deleteProductByName)
   .put(updateProductByName);

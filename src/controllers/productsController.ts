@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { connect } from "../database";
-import { Post } from "../interfaces/ProductsInterface";
+import { Product } from "../interfaces/ProductsInterface";
 
 export const getProducts = async (
   req: Request,
@@ -57,7 +57,7 @@ export const createProduct = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newPost: Post = req.body;
+    const newPost: Product = req.body;
     const connection = await connect();
     connection.query("INSERT INTO products SET ?", [newPost]);
     return res.status(200).json({
@@ -93,7 +93,7 @@ export const deleteProductByName = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const name = req.params.producName;
+    const name = req.params.productName;
     const connection = await connect();
     await connection.query("DELETE FROM products WHERE name= ?", [name]);
     if (!name) {
@@ -114,7 +114,7 @@ export const updateProductById = async (
 ): Promise<Response> => {
   try {
     const id = req.params.productId;
-    const updateProductById: Post = req.body;
+    const updateProductById: Product = req.body;
     const connection = await connect();
     await connection.query("UPDATE products set ? WHERE id= ?", [
       updateProductById,
@@ -137,8 +137,8 @@ export const updateProductByName = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const name = req.params.producName;
-    const updateProductByName: Post = req.body;
+    const name = req.params.productName;
+    const updateProductByName: Product = req.body;
     const connection = await connect();
     await connection.query("UPDATE products set ? WHERE name= ?", [
       updateProductByName,
