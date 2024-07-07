@@ -11,6 +11,7 @@ import {
 } from "../../controllers/productsController";
 
 const router = Router();
+
 /**
  * @openapi
  * /v1/products:
@@ -31,10 +32,17 @@ const router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
+ *                     $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
-
-router.route("/").get(getProducts).post(createProduct);
 
 /**
  * @openapi
@@ -43,8 +51,9 @@ router.route("/").get(getProducts).post(createProduct);
  *     tags:
  *       - ProductsById
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: productId
+ *         required: true
  *         schema:
  *           type: string
  *         description: Product identifier
@@ -54,15 +63,26 @@ router.route("/").get(getProducts).post(createProduct);
  *         content:
  *           application/json:
  *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 /**
@@ -72,8 +92,9 @@ router.route("/").get(getProducts).post(createProduct);
  *     tags:
  *       - ProductsById
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: productId
+ *         required: true
  *         schema:
  *           type: string
  *         description: Product identifier
@@ -85,13 +106,28 @@ router.route("/").get(getProducts).post(createProduct);
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Success deleted {productId}
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 /**
@@ -101,11 +137,18 @@ router.route("/").get(getProducts).post(createProduct);
  *     tags:
  *       - ProductsById
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: productId
+ *         required: true
  *         schema:
  *           type: string
  *         description: Product identifier
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
  *         description: OK
@@ -114,13 +157,28 @@ router.route("/").get(getProducts).post(createProduct);
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Success updated {productId}
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 router
@@ -129,33 +187,45 @@ router
   .delete(deleteProductById)
   .put(updateProductById);
 
-  /**
+/**
  * @openapi
  * /v1/products/name/{productName}:
  *   get:
  *     tags:
  *       - ProductsByName
  *     parameters:
- *       - in: query
- *         name: productId
+ *       - in: path
+ *         name: productName
+ *         required: true
  *         schema:
  *           type: string
- *         description: Product identifier
+ *         description: Product name
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 /**
@@ -165,11 +235,12 @@ router
  *     tags:
  *       - ProductsByName
  *     parameters:
- *       - in: query
- *         name: productId
+ *       - in: path
+ *         name: productName
+ *         required: true
  *         schema:
  *           type: string
- *         description: Product identifier
+ *         description: Product name
  *     responses:
  *       200:
  *         description: OK
@@ -178,13 +249,28 @@ router
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Success deleted {productName}
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 /**
@@ -194,11 +280,18 @@ router
  *     tags:
  *       - ProductsByName
  *     parameters:
- *       - in: query
- *         name: productId
+ *       - in: path
+ *         name: productName
+ *         required: true
  *         schema:
  *           type: string
- *         description: Product identifier
+ *         description: Product name
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       200:
  *         description: OK
@@ -207,17 +300,32 @@ router
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 message:
  *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                   example: Success updated {productName}
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
 router
-  .route("/:productName")
+  .route("/name/:productName")
   .get(getProductByName)
   .delete(deleteProductByName)
   .put(updateProductByName);

@@ -1,8 +1,12 @@
 import { App } from "./app";
 
+const app = new App(4000);
+
 const main = () => {
-  const app = new App(4000);
   app.listen();
 };
 
 main();
+
+export default app.app; 
+

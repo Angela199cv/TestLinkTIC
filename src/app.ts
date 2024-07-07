@@ -5,7 +5,7 @@ import productRoutes from "./v1/routes/productsRoutes";
 import { swaggerDocs as V1SwaggerDocs } from "./v1/swagger";
 
 export class App {
-  private app: Application;
+  public app: Application;
 
   constructor(private port?: number | string) {
     this.app = express();
