@@ -12,6 +12,8 @@ import {
 
 const router = Router();
 
+
+
 /**
  * @openapi
  * /v1/products:
@@ -84,6 +86,8 @@ const router = Router();
  *                 message:
  *                   type: string
  */
+
+router.route("/").get(getProducts).post(createProduct);
 
 /**
  * @openapi

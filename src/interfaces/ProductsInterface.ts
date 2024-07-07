@@ -1,8 +1,8 @@
 export interface Product {
-  id?: String;
+  id?: Number;
   name: String;
   description: String;
-  price: Number;
-  img_url: String;
-  create_date: Date;
+  price: String;
+  image_url: String;
+  create_date?: Date;
 }

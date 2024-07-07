@@ -20,7 +20,8 @@ export class App {
 
   middlewares() {
     this.app.use(morgan("dev"));
-    this.app.use(express.urlencoded({ extended: false }));
+    //this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(express.json());
     V1SwaggerDocs(this.app, this.port);
   }
 
