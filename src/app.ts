@@ -3,6 +3,7 @@ import morgan from "morgan";
 import indexRoutes from "./v1/routes/indexRoutes";
 import productRoutes from "./v1/routes/productsRoutes";
 import { swaggerDocs as V1SwaggerDocs } from "./v1/swagger";
+import cors from "cors";
 
 export class App {
   public app: Application;
@@ -22,6 +23,7 @@ export class App {
     this.app.use(morgan("dev"));
     //this.app.use(express.urlencoded({ extended: false }));
     this.app.use(express.json());
+    this.app.use(cors());
     V1SwaggerDocs(this.app, this.port);
   }
 
