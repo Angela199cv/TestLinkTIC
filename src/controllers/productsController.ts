@@ -7,10 +7,9 @@ export const getProducts = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const connection = await connect();
-    const products = await connection.query("SELECT * FROM products");
-    await connection.end();
-    return res.status(200).json(products[0]);
+    const db = await connect();
+    const products = await db.all("SELECT * FROM products");
+    return res.status(200).json(products);
   } catch (err) {
     return res.status(500).json({ message: err });
   }
@@ -22,13 +21,12 @@ export const getProductById = async (
 ): Promise<Response> => {
   try {
     const id = req.params.productId;
-    const connection = await connect();
-    let result=await connection.query("SELECT * FROM products WHERE id= ?", [id]);
-    console.log(result)
-    if (!result) {
-      return res.status(404).json({ message: `Products not found` });
+    const db = await connect();
+    const product = await db.get("SELECT * FROM products WHERE id = ?", [id]);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json(result[0]);
+      return res.status(200).json(product);
     }
   } catch (err) {
     return res.status(500).json({ message: err });
@@ -41,12 +39,12 @@ export const getProductByName = async (
 ): Promise<Response> => {
   try {
     const name = req.params.productName;
-    const connection = await connect();
-    let result=await connection.query("SELECT * FROM products WHERE name= ?", [name]);
-    if (!result) {
-      return res.status(404).json({ message: `Products not found` });
+    const db = await connect();
+    const product = await db.get("SELECT * FROM products WHERE name = ?", [name]);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json(result[0]);
+      return res.status(200).json(product);
     }
   } catch (err) {
     return res.status(500).json({ message: err });
@@ -58,10 +56,12 @@ export const createProduct = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newPost: Product = req.body;
-    const connection = await connect();
-    connection.query("INSERT INTO products SET ?", [newPost]);
-    return res.status(200).json({
+    const newProduct: Product = req.body;
+    const db = await connect();
+    const result = await db.run("INSERT INTO products (name, price, description) VALUES (?, ?, ?)", [newProduct.name, newProduct.price, newProduct.description]);
+    return res.status(201).json({
+      id: result.lastID,
+      ...newProduct,
       message: "Product Created",
     });
   } catch (err) {
@@ -75,14 +75,12 @@ export const deleteProductById = async (
 ): Promise<Response> => {
   try {
     const id = req.params.productId;
-    const connection = await connect();
-    let result=await connection.query("DELETE FROM products WHERE id= ?", [id]);
-    if (!result) {
-      return res.status(404).json({ message: `Products not found` });
+    const db = await connect();
+    const result = await db.run("DELETE FROM products WHERE id = ?", [id]);
+    if (result.changes === 0) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json({
-        message: `Success deleted ${id}`,
-      });
+      return res.status(200).json({ message:` Success deleted ${id} `});
     }
   } catch (err) {
     return res.status(500).json({ message: err });
@@ -95,19 +93,18 @@ export const deleteProductByName = async (
 ): Promise<Response> => {
   try {
     const name = req.params.productName;
-    const connection = await connect();
-    let result=await connection.query("DELETE FROM products WHERE name= ?", [name]);
-    if (!result) {
-      return res.status(404).json({ message: `Products not found` });
+    const db = await connect();
+    const result = await db.run("DELETE FROM products WHERE name = ?", [name]);
+    if (result.changes === 0) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json({
-        message: `Success deleted ${name}`,
-      });
+      return res.status(200).json({ message:`Success deleted ${name}`  });
     }
   } catch (err) {
     return res.status(500).json({ message: err });
   }
 };
+
 
 export const updateProductById = async (
   req: Request,
@@ -115,23 +112,19 @@ export const updateProductById = async (
 ): Promise<Response> => {
   try {
     const id = req.params.productId;
-    const updateProductById: Product = req.body;
-    const connection = await connect();
-    let result=await connection.query("UPDATE products set ? WHERE id= ?", [
-      updateProductById,
-      id,
-    ]);
-    if (!result) {
-      return res.status(404).json({ message: `Products not found` });
+    const updatedProduct: Product = req.body;
+    const db = await connect();
+    const result = await db.run("UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?", [updatedProduct.name, updatedProduct.price, updatedProduct.description, id]);
+    if (result.changes === 0) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json({
-        message: `Success updated ${id}`,
-      });
+      return res.status(200).json({ message:`Success updated ${id}` });
     }
   } catch (err) {
     return res.status(500).json({ message: err });
   }
 };
+
 
 export const updateProductByName = async (
   req: Request,
@@ -139,18 +132,13 @@ export const updateProductByName = async (
 ): Promise<Response> => {
   try {
     const name = req.params.productName;
-    const updateProductByName: Product = req.body;
-    const connection = await connect();
-    await connection.query("UPDATE products set ? WHERE name= ?", [
-      updateProductByName,
-      name,
-    ]);
-    if (!name) {
-      return res.status(404).json({ message: `Products not found` });
+    const updatedProduct: Product = req.body;
+    const db = await connect();
+    const result = await db.run("UPDATE products SET name = ?, price = ?, description = ? WHERE name = ?", [updatedProduct.name, updatedProduct.price, updatedProduct.description, name]);
+    if (result.changes === 0) {
+      return res.status(404).json({ message: 'Product not found' });
     } else {
-      return res.status(200).json({
-        message: `Success updated ${name}`,
-      });
+      return res.status(200).json({ message:` Success updated ${name}` });
     }
   } catch (err) {
     return res.status(500).json({ message: err });

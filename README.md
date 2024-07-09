@@ -31,7 +31,7 @@ Para iniciar el servidor, ejecuta el siguiente comando:
 
 bash
 Copiar código
-npm start
+npm run dev
 Esto iniciará el servidor en el puerto especificado.
 
 Uso
@@ -43,6 +43,12 @@ PUT /v1/products/:id: Actualiza un producto existente.
 DELETE /v1/products/:id: Elimina un producto existente.
 Formato del cuerpo de la solicitud
 Los endpoints que requieren datos del producto esperan un cuerpo de solicitud en formato JSON con los siguientes campos:
+
+La documentación swagger la puede encontrar escriendo el siguiente link en el navegador una vez el servidor este corriendo
+
+http://localhost:4000/api/v1/docs
+
+Nuestro puerto por defecto es el puerto: 4000
 
 json
 Copiar código
@@ -57,7 +63,7 @@ Para crear un nuevo producto:
 
 bash
 Copiar código
-curl -X POST http://localhost:PUERTO/api/products \
+curl -X POST http://localhost:4000/api/products \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Producto de ejemplo",
